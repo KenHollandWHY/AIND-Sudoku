@@ -1,5 +1,6 @@
 assignments = []
-
+rows = 'ABCDEFGHI'
+cols = '123456789'
 boxes = cross(rows, cols)
 
 row_units = [cross(r, cols) for r in rows]
