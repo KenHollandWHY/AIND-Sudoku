@@ -20,11 +20,12 @@ def naked_twins(values):
     """
 
     # Find all instances of naked twins
+    
     # Eliminate the naked twins as possibilities for their peers
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
-    pass
+     return [s+t for s in A for t in B]
 
 def grid_values(grid):
     """
@@ -36,7 +37,11 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    pass
+    board= {k: v for k, v in zip(boxes, grid)}
+    for key, value in board.items():
+        if value == '.':
+            board[key] = '123456789'
+    return board 
 
 def display(values):
     """
@@ -44,19 +49,88 @@ def display(values):
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
+    width = 1+max(len(values[s]) for s in boxes)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    return
 
 def eliminate(values):
-    pass
+    """Eliminate values from peers of each box with a single value.
+
+    Go through all the boxes, and whenever there is a box with a single value,
+    eliminate this value from the set of values of all its peers.
+
+    Args:
+        values: Sudoku in dictionary form.
+    Returns:
+        Resulting Sudoku in dictionary form after eliminating values."""
+        
+        
+    for key, value in values.items():      # go through dict
+        if len(value) == 1:                # check that there is only one value in box
+            peer = peers[key]              # get that board's peers 
+            eliminate_value = value        # keep track of value we want to delete
+            for item in peer:              # go through the peers 
+                original_values = values[item]  # look up the values the peer boxes have
+                new_values = original_values.replace(eliminate_value,'') # delete single item
+                values[item] = new_values   # update the peers boxes on the board
+    return values 
 
 def only_choice(values):
-    pass
+     """Finalize all values that are the only choice for a unit.
+
+    Go through all the units, and whenever there is a unit with a value
+    that only fits in one box, assign the value to this box.
+
+    Input: Sudoku in dictionary form.
+    Output: Resulting Sudoku in dictionary form after filling in only choices.
+    """
+    for unit in unitlist:
+        for digit in '123456789':
+            dplaces = [box for box in unit if digit in values[box]]
+            if len(dplaces) == 1:
+                values[dplaces[0]] = digit
+    return values
 
 def reduce_puzzle(values):
-    pass
+    
+    stalled = False
+    while not stalled:
+        # Check how many boxes have a determined value
+        solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
+
+        
+        only_choice(eliminate(values))
+    
+        # Check how many boxes have a determined value, to compare
+        solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
+        # If no new values were added, stop the loop.
+        stalled = solved_values_before == solved_values_after
+        # Sanity check, return False if there is a box with zero available values:
+        if len([box for box in values.keys() if len(values[box]) == 0]):
+            return False
+    return values
 
 def search(values):
-    pass
+        "Using depth-first search and propagation, try all possible values."
+    # First, reduce the puzzle using the previous function
+    values = reduce_puzzle(values)
+    if values is False:
+        return False ## Failed earlier
+    if all(len(values[s]) == 1 for s in boxes): 
+        return values ## Solved!
+    # Choose one of the unfilled squares with the fewest possibilities
+    n,s = min((len(values[s]), s) for s in boxes if len(values[s]) > 1)
+    # Now use recurrence to solve each one of the resulting sudokus, and 
+    for value in values[s]:
+        new_sudoku = values.copy()
+        new_sudoku[s] = value
+        attempt = search(new_sudoku)
+        if attempt:
+            return attempt
 
 def solve(grid):
     """
