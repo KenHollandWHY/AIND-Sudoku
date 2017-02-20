@@ -90,6 +90,8 @@ def eliminate(values):
                 original_values = values[item]  # look up the values the peer boxes have
                 new_values = original_values.replace(eliminate_value,'') # delete single item
                 values[item] = new_values   # update the peers boxes on the board
+        
+            
     return values 
 
 def only_choice(values):
@@ -154,6 +156,8 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
+    
+    return search(reduce_puzzle(grid))
 
 if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
