@@ -131,7 +131,7 @@ def reduce_puzzle(values):
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
 
         
-        only_choice(eliminate(values))
+        naked_twins(only_choice(eliminate(values)))
     
         # Check how many boxes have a determined value, to compare
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
