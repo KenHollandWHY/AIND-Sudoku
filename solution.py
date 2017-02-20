@@ -8,7 +8,8 @@ column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
 diag1 = [[d[0]+d[1] for d in zip(rows,cols)]]
 diag2 = [[d[0]+d[1] for d in zip(rows,cols[::-1])]]
-# to solve the diagonal soduku we introduce two new units in the diagonal. 
+# to solve the diagonal soduku we introduce two new units to the unitlist covering the two diagonals
+# using zip to step  through both and again but stepping through cols in reverse [::-1]
 unitlist = row_units + column_units + square_units +diag1 + diag2
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
@@ -35,12 +36,12 @@ def naked_twins(values):
     """
 
     digits ='123456789'
-    pairs = [s + t for s in digits for t in digits if s!=t]     #all the possible 2 digit combinations, where digits dont repeat
+    pairs = [first + second for first in digits for second in digits if first!=second]     #all the possible 2 digit combinations, where digits dont repeat
     for unit in unitlist:                         # now we go through every unit
           for pair in pairs:
                 dplaces = [box for box in unit if values[box] == pair] #creates a list of boxes that has 'pair' in it
-                if len(dplaces) ==2:  #dplaces will create a list of lists with items in pair. some units will only have one
-                                      # box with that pair, and we are only interested in the list that has two, the naked twins
+                if len(dplaces) ==2:  #dplaces will create a list of lists with boxes containing a 'pair'. some units will only have one
+                                      # only interested when there are two boxes, the naked twins
                     boxes_to_replace = [box_temp for box_temp in unit if box_temp not in dplaces] # these are the boxes that
                                                                                                   # dont contain the pair 
                     for pairless_box in boxes_to_replace:
