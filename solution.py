@@ -33,12 +33,21 @@ def naked_twins(values):
         the values dictionary with the naked twins eliminated from peers.
     """
 
-    # Find all instances of naked twins
-    potential_pairs = [box for box in values.keys() if len(values[box]) == 2]
-    # now we want to go through that list and check if a member in potential pair is in the peer pair
-    # and if there is one then we want to go through those peers and replace the box value 
-    
-    # Eliminate the naked twins as possibilities for their peers
+    digits ='123456789'
+    pairs = [s + t for s in digits for t in digits if s!=t]     #all the possible 2 digit combinations, where digits dont repeat
+    for unit in unitlist:                         # now we go through every unit
+          for pair in pairs:
+                dplaces = [box for box in unit if values[box] == pair] #creates a list of boxes that has 'pair' in it
+                if len(dplaces) ==2:  #dplaces will create a list of lists with items in pair. some units will only have one
+                                      # box with that pair, and we are only interested in the list that has two, the naked twins
+                    boxes_to_replace = [box_temp for box_temp in unit if box_temp not in dplaces] # these are the boxes that
+                                                                                                  # dont contain the pair 
+                    for pairless_box in boxes_to_replace:
+                        if len(values[pairless_box]) >2:  # I want to access those boxes that are longer than 2 only
+                            values[pairless_box] =  values[pairless_box].replace(pair[0],'') # in case only 1 value in the pair needs to be replaced. 
+                            values[pairless_box] =  values[pairless_box].replace(pair[1],'') # ie pair is '12' we want to elimiante '234' not just '1234'
+   
+    return values
 
 def cross(A, B):
     "Cross product of elements in A and elements in B."
