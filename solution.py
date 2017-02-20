@@ -33,6 +33,9 @@ def naked_twins(values):
     """
 
     # Find all instances of naked twins
+    potential_pairs = [box for box in values.keys() if len(values[box]) == 2]
+    # now we want to go through that list and check if a member in potential pair is in the peer pair
+    # and if there is one then we want to go through those peers and replace the box value 
     
     # Eliminate the naked twins as possibilities for their peers
 
