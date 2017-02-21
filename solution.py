@@ -9,7 +9,7 @@ square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','45
 diag1 = [[d[0]+d[1] for d in zip(rows,cols)]]
 diag2 = [[d[0]+d[1] for d in zip(rows,cols[::-1])]]
 # to solve the diagonal soduku we introduce two new units to the unitlist covering the two diagonals
-# using zip to step  through both and again but stepping through cols in reverse [::-1]
+# using zip to step a combo of rows-cols and then stepping through cols in reverse [::-1]
 unitlist = row_units + column_units + square_units +diag1 + diag2
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
