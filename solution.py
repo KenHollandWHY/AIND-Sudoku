@@ -35,7 +35,7 @@ def naked_twins(values):
         the values dictionary with the naked twins eliminated from peers.
     """
 
-    digits ='123456789'
+    digits =cols
     pairs = [first + second for first in digits for second in digits if first!=second]     #all the possible 2 digit combinations, where digits dont repeat
     for unit in unitlist:                         # now we go through every unit
           for pair in pairs:
