@@ -1,3 +1,11 @@
+# Still To Do:
+# 1) All the utilities could be put in a separate utils or initialization file.
+# 2) logging with default level ERROR could be added to debug the code
+# 3) naked_twins can be split up in two methods find_twins, eliminate twins to enhance readability.
+# 4) reduce_puzzle needs a description 
+# 5) naked_tuples and another related concept hidden twins could be implemented 
+
+
 assignments = []
 rows = 'ABCDEFGHI'
 cols = '123456789'
